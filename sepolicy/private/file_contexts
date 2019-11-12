@@ -1,0 +1,2 @@
+/system/bin/vncflinger   u:object_r:vncflinger_exec:s0
+/dev/socket/vncflinger   u:object_r:vncflinger_socket:s0

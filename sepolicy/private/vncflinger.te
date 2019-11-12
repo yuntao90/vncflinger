@@ -1,0 +1,12 @@
+typeattribute vncflinger coredomain;
+typeattribute vncflinger_socket coredomain_socket;
+
+init_daemon_domain(vncflinger)
+
+allow vncflinger hwservicemanager_prop:file read;
+allow vncflinger hwservicemanager_prop:file open;
+allow vncflinger hwservicemanager_prop:file getattr;
+allow vncflinger hwservicemanager:binder call;
+
+allow adbd vncflinger_socket:sock_file write;
+allow adbd vncflinger:unix_stream_socket connectto;

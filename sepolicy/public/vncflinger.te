@@ -1,0 +1,35 @@
+type vncflinger_exec, exec_type, file_type;
+type vncflinger_socket, file_type;
+type vncflinger, domain;
+
+binder_use(vncflinger)
+net_domain(vncflinger);
+
+# uinput
+allow vncflinger uhid_device:chr_file rw_file_perms;
+
+# read buffers from surfaceflinger
+allow vncflinger ion_device:chr_file r_file_perms;
+allow vncflinger surfaceflinger_service:service_manager find;
+
+binder_call(vncflinger, surfaceflinger);
+binder_call(vncflinger, hal_graphics_composer)
+binder_call(vncflinger, hal_graphics_allocator)
+
+# buffer callbacks
+binder_call(surfaceflinger, vncflinger);
+
+# socket
+allow vncflinger rootfs:lnk_file getattr;
+allow vncflinger vncflinger_socket:sock_file create_file_perms;
+allow vncflinger vncflinger_socket:sock_file write;
+
+allow vncflinger hal_graphics_mapper_hwservice:hwservice_manager find;
+allow vncflinger hal_graphics_allocator_hwservice:hwservice_manager find;
+
+#============= hwservicemanager ==============
+allow hwservicemanager vncflinger:binder transfer;
+allow hwservicemanager vncflinger:dir search;
+allow hwservicemanager vncflinger:file { open read };
+allow hwservicemanager vncflinger:process getattr;
+

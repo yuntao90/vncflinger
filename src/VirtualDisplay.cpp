@@ -52,12 +52,12 @@ VirtualDisplay::VirtualDisplay(DisplayInfo* info, uint32_t width, uint32_t heigh
 
     mDpy = SurfaceComposerClient::createDisplay(String8("VNC-VirtualDisplay"), false /*secure*/);
 
-    SurfaceComposerClient::openGlobalTransaction();
-    SurfaceComposerClient::setDisplaySurface(mDpy, mProducer);
+    SurfaceComposerClient::Transaction t;
+    t.setDisplaySurface(mDpy, mProducer);
 
-    SurfaceComposerClient::setDisplayProjection(mDpy, 0, mSourceRect, displayRect);
-    SurfaceComposerClient::setDisplayLayerStack(mDpy, 0);  // default stack
-    SurfaceComposerClient::closeGlobalTransaction();
+    t.setDisplayProjection(mDpy, 0, mSourceRect, displayRect);
+    t.setDisplayLayerStack(mDpy, 0);  // default stack
+    t.apply();
 
     ALOGV("Virtual display (%ux%u [viewport=%ux%u] created", width, height, displayRect.getWidth(),
           displayRect.getHeight());
